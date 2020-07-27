@@ -1,3 +1,3 @@
 # BinaryTree
 <br>
-A simple binary search tree written in c++.
+A simple binary tree written in c++.
