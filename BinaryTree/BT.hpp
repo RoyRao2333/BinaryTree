@@ -10,6 +10,7 @@
 #define BT_hpp
 
 #include <iostream>
+#include <queue>
 using namespace std;
 
 template<typename T> struct BTNode {
@@ -34,6 +35,7 @@ public:
     void preorderTraversal() { this->preorderTraversal(this->root); }
     void inorderTraversal() { this->preorderTraversal(this->root); }
     void postorderTraversal() { this->preorderTraversal(this->root); }
+    void levelOrderTraversal() { this->levelOrderTraversal(this->root); }
     /// get node
     BTNode<T>* getRoot() const { return this->root; }
     BTNode<T>* getParent(BTNode<T> *curNode) { return (!this->root || this->root == curNode) ? nullptr : this->getParent(this->root, curNode); }
@@ -47,6 +49,7 @@ private:
     void preorderTraversal(BTNode<T> *tree);
     void inorderTraversal(BTNode<T> *tree);
     void postorderTraversal(BTNode<T> *tree);
+    void levelOrderTraversal(BTNode<T> *tree);
     BTNode<T>* getParent(BTNode<T> *tree, BTNode<T> *curNode);
     BTNode<T>* copy(BTNode<T> *tree);
     bool isEqual(BTNode<T> *aTree, BTNode<T> *bTree);
@@ -81,6 +84,23 @@ template<typename T> void BinaryTree<T>::postorderTraversal(BTNode<T> *tree) {
         this->postorderTraversal(tree->leftChild);
         this->postorderTraversal(tree->rightChild);
         cout << tree->data << "\t";
+    }
+}
+
+template<typename T> void BinaryTree<T>::levelOrderTraversal(BTNode<T> *tree) {
+    queue<BTNode<T>*> q;
+    q.push(tree);
+    BTNode<T> *temp;
+    while (!q.empty()) {
+        temp = q.front();
+        q.pop();
+        cout << temp->data << "\t";
+        if (temp->leftChild) {
+            q.push(temp->leftChild);
+        }
+        if (temp->rightChild) {
+            q.push(temp->rightChild);
+        }
     }
 }
 
