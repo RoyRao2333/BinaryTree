@@ -30,8 +30,8 @@ public:
     /// initialization
     BinaryTree(): root(nullptr) {}
     ~BinaryTree() { this->destroy(); }
-    BinaryTree(BinaryTree<T> &tree) { this->root = this->copy(tree.getRoot()); }
-    bool operator==(BinaryTree<T> &tree) { return isEqual(this->getRoot(), tree.getRoot()); }
+    BinaryTree(BinaryTree<T> &node) { this->root = this->copy(node.getRoot()); }
+    bool operator==(BinaryTree<T> &node) { return isEqual(this->getRoot(), node.getRoot()); }
     void destroy() { this->destroy(this->root); }
     /// traversal
     void preorderTraversal() { this->preorderTraversal(this->root); }
@@ -48,54 +48,85 @@ public:
     int getHeight() { return this->getHeight(this->root); }
     bool isEmpty() { return this->root == nullptr; }
 private:
-    void preorderTraversal(BTNode<T> *tree);
-    void inorderTraversal(BTNode<T> *tree);
-    void postorderTraversal(BTNode<T> *tree);
-    void levelOrderTraversal(BTNode<T> *tree);
-    BTNode<T>* getParent(BTNode<T> *tree, BTNode<T> *curNode);
-    BTNode<T>* copy(BTNode<T> *tree);
+    void preorderTraversal(BTNode<T> *node);
+    void inorderTraversal(BTNode<T> *node);
+    void postorderTraversal(BTNode<T> *node);
+    void levelOrderTraversal(BTNode<T> *node);
+    BTNode<T>* getParent(BTNode<T> *node, BTNode<T> *curNode);
+    BTNode<T>* copy(BTNode<T> *node);
     bool isEqual(BTNode<T> *aTree, BTNode<T> *bTree);
-    void destroy(BTNode<T> *tree);
-    int getSize(BTNode<T> *tree);
-    int getHeight(BTNode<T> *tree);
+    void destroy(BTNode<T> *node);
+    int getSize(BTNode<T> *node);
+    int getHeight(BTNode<T> *node);
 private:
     BTNode<T> *root;
 };
 
 
 
-//  MARK: - DEPLOYMENT
+/*  
+    MARK: - DEPLOYMENT 
+*/
+
+// Iteration
 template<typename T> 
-void BinaryTree<T>::preorderTraversal(BTNode<T> *tree) {
-    if (tree) {
-        cout << tree->data << "\t";
-        this->preorderTraversal(tree->leftChild);
-        this->preorderTraversal(tree->rightChild);
+void BinaryTree<T>::preorderTraversal(BTNode<T> *node) {
+    if (!node) return {};
+    stack<BTNode<T>*> stk;
+    while (node || !stk.empty()) {
+        while (node) {
+            cout << node->data << "\t";
+            stk.push(node);
+            node = node->leftChild;
+        }
+        node = stk.top()->rightChild;
+        stk.pop();
     }
 }
 
 template<typename T> 
-void BinaryTree<T>::inorderTraversal(BTNode<T> *tree) {
-    if (tree) {
-        this->inorderTraversal(tree->leftChild);
-        cout << tree->data << "\t";
-        this->inorderTraversal(tree->rightChild);
+void BinaryTree<T>::inorderTraversal(BTNode<T> *node) {
+    if (!node) return {};
+    stack<BTNode<T>*> stk;
+    while (node || !stk.empty()) {
+        while (node) {
+            stk.push(node);
+            node = node->leftChild;
+        }
+        cout << node->data << "\t";
+        node = stk.top()->rightChild;
+        stk.pop();
     }
 }
 
 template<typename T> 
-void BinaryTree<T>::postorderTraversal(BTNode<T> *tree) {
-    if (tree) {
-        this->postorderTraversal(tree->leftChild);
-        this->postorderTraversal(tree->rightChild);
-        cout << tree->data << "\t";
+void BinaryTree<T>::postorderTraversal(BTNode<T> *node) {
+    if (!node) return {};
+    stack<BTNode<T>*> stk;
+    stk.push(node);
+    while (!stk.empty()) {
+        BTNode<T> *tempNode = stk.top();
+        if (!tempNode) {
+            stk.pop();
+            cout << stk.top()->data << "\t";
+            stk.pop();
+            continue;
+        }
+        stk.push(nullptr);
+        if (tempNode->rightChild) {
+            stk.push(tempNode->rightChild);
+        }
+        if (tempNode->leftChild) {
+            stk.push(tempNode->leftChild);
+        }
     }
 }
 
 template<typename T> 
-void BinaryTree<T>::levelOrderTraversal(BTNode<T> *tree) {
+void BinaryTree<T>::levelOrderTraversal(BTNode<T> *node) {
+    if (!node) return {};
     queue<BTNode<T>*> q;
-    q.push(tree);
+    q.push(node);
     BTNode<T> *temp;
     while (!q.empty()) {
         temp = q.front();
@@ -110,19 +141,49 @@ void BinaryTree<T>::levelOrderTraversal(BTNode<T> *tree) {
     }
 }
 
+// Recursion
+/*
 template<typename T> 
-BTNode<T>* BinaryTree<T>::getParent(BTNode<T> *tree, BTNode<T> *curNode) {
-    if (!tree) {
+void BinaryTree<T>::preorderTraversal(BTNode<T> *node) {
+    if (node) {
+        cout << node->data << "\t";
+        this->preorderTraversal(node->leftChild);
+        this->preorderTraversal(node->rightChild);
+    }
+}
+
+template<typename T> 
+void BinaryTree<T>::inorderTraversal(BTNode<T> *node) {
+    if (node) {
+        this->inorderTraversal(node->leftChild);
+        cout << node->data << "\t";
+        this->inorderTraversal(node->rightChild);
+    }
+}
+
+template<typename T> 
+void BinaryTree<T>::postorderTraversal(BTNode<T> *node) {
+    if (node) {
+        this->postorderTraversal(node->leftChild);
+        this->postorderTraversal(node->rightChild);
+        cout << node->data << "\t";
+    }
+}
+*/
+
+template<typename T> 
+BTNode<T>* BinaryTree<T>::getParent(BTNode<T> *node, BTNode<T> *curNode) {
+    if (!node) {
         return nullptr;
     }
-    if (tree->leftChild == curNode || tree->rightChild == curNode) {
-        return tree;
+    if (node->leftChild == curNode || node->rightChild == curNode) {
+        return node;
     }
-    BTNode<T> *ptr = this->getParent(tree->leftChild, curNode);
+    BTNode<T> *ptr = this->getParent(node->leftChild, curNode);
     if (ptr) {
         return ptr;
     } else {
-        return this->getParent(tree->rightChild, curNode);
+        return this->getParent(node->rightChild, curNode);
     }
 }
 
@@ -137,42 +198,42 @@ BTNode<T>* BinaryTree<T>::getRightChild(BTNode<T> *curNode) {
 }
 
 template<typename T> 
-int BinaryTree<T>::getSize(BTNode<T> *tree) {
-    if (!tree) {
+int BinaryTree<T>::getSize(BTNode<T> *node) {
+    if (!node) {
         return 0;
     }
-    return 1 + this->getSize(tree->leftChild) + this->getSize(tree->rightChild);
+    return 1 + this->getSize(node->leftChild) + this->getSize(node->rightChild);
 }
 
 template<typename T> 
-int BinaryTree<T>::getHeight(BTNode<T> *tree) {
-    if (!tree) {
+int BinaryTree<T>::getHeight(BTNode<T> *node) {
+    if (!node) {
         return 0;
     }
-    int left = this->getHeight(tree->leftChild);
-    int right = this->getHeight(tree->rightChild);
+    int left = this->getHeight(node->leftChild);
+    int right = this->getHeight(node->rightChild);
     return (left > right) ? left + 1 : right + 1;
 }
 
 template<typename T> 
-void BinaryTree<T>::destroy(BTNode<T> *tree) {
-    if (tree) {
-        this->destroy(tree->leftChild);
-        this->destroy(tree->rightChild);
-        delete tree;
-        tree = nullptr;
+void BinaryTree<T>::destroy(BTNode<T> *node) {
+    if (node) {
+        this->destroy(node->leftChild);
+        this->destroy(node->rightChild);
+        delete node;
+        node = nullptr;
     }
 }
 
 template<typename T> 
-BTNode<T>* BinaryTree<T>::copy(BTNode<T> *tree) {
-    if (!tree) {
+BTNode<T>* BinaryTree<T>::copy(BTNode<T> *node) {
+    if (!node) {
         return nullptr;
     }
     BTNode<T> *newTree = new BTNode<T>;
-    newTree->data = tree->data;
-    newTree->leftChild = this->copy(tree->leftChild);
-    newTree->rightChild = this->copy(tree->rightChild);
+    newTree->data = node->data;
+    newTree->leftChild = this->copy(node->leftChild);
+    newTree->rightChild = this->copy(node->rightChild);
     return newTree;
 }
 
