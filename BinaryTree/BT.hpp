@@ -13,7 +13,8 @@
 #include <queue>
 using namespace std;
 
-template<typename T> struct BTNode {
+template<typename T> 
+struct BTNode {
 public:
     BTNode(): leftChild(nullptr), rightChild(nullptr) {}
     BTNode(T _data): data(_data), leftChild(nullptr), rightChild(nullptr) {}
@@ -23,7 +24,8 @@ public:
     BTNode<T> *rightChild;
 };
 
-template<typename T> class BinaryTree {
+template<typename T> 
+class BinaryTree {
 public:
     /// initialization
     BinaryTree(): root(nullptr) {}
@@ -63,7 +65,8 @@ private:
 
 
 //  MARK: - DEPLOYMENT
-template<typename T> void BinaryTree<T>::preorderTraversal(BTNode<T> *tree) {
+template<typename T> 
+void BinaryTree<T>::preorderTraversal(BTNode<T> *tree) {
     if (tree) {
         cout << tree->data << "\t";
         this->preorderTraversal(tree->leftChild);
@@ -71,7 +74,8 @@ template<typename T> void BinaryTree<T>::preorderTraversal(BTNode<T> *tree) {
     }
 }
 
-template<typename T> void BinaryTree<T>::inorderTraversal(BTNode<T> *tree) {
+template<typename T> 
+void BinaryTree<T>::inorderTraversal(BTNode<T> *tree) {
     if (tree) {
         this->inorderTraversal(tree->leftChild);
         cout << tree->data << "\t";
@@ -79,7 +83,8 @@ template<typename T> void BinaryTree<T>::inorderTraversal(BTNode<T> *tree) {
     }
 }
 
-template<typename T> void BinaryTree<T>::postorderTraversal(BTNode<T> *tree) {
+template<typename T> 
+void BinaryTree<T>::postorderTraversal(BTNode<T> *tree) {
     if (tree) {
         this->postorderTraversal(tree->leftChild);
         this->postorderTraversal(tree->rightChild);
@@ -87,7 +92,8 @@ template<typename T> void BinaryTree<T>::postorderTraversal(BTNode<T> *tree) {
     }
 }
 
-template<typename T> void BinaryTree<T>::levelOrderTraversal(BTNode<T> *tree) {
+template<typename T> 
+void BinaryTree<T>::levelOrderTraversal(BTNode<T> *tree) {
     queue<BTNode<T>*> q;
     q.push(tree);
     BTNode<T> *temp;
@@ -104,7 +110,8 @@ template<typename T> void BinaryTree<T>::levelOrderTraversal(BTNode<T> *tree) {
     }
 }
 
-template<typename T> BTNode<T>* BinaryTree<T>::getParent(BTNode<T> *tree, BTNode<T> *curNode) {
+template<typename T> 
+BTNode<T>* BinaryTree<T>::getParent(BTNode<T> *tree, BTNode<T> *curNode) {
     if (!tree) {
         return nullptr;
     }
@@ -119,22 +126,26 @@ template<typename T> BTNode<T>* BinaryTree<T>::getParent(BTNode<T> *tree, BTNode
     }
 }
 
-template<typename T> BTNode<T>* BinaryTree<T>::getLeftChild(BTNode<T> *curNode) {
+template<typename T> 
+BTNode<T>* BinaryTree<T>::getLeftChild(BTNode<T> *curNode) {
     return (curNode != nullptr) ? curNode->leftChild : nullptr;
 }
 
-template<typename T> BTNode<T>* BinaryTree<T>::getRightChild(BTNode<T> *curNode) {
+template<typename T> 
+BTNode<T>* BinaryTree<T>::getRightChild(BTNode<T> *curNode) {
     return (curNode != nullptr) ? curNode->rightChild : nullptr;
 }
 
-template<typename T> int BinaryTree<T>::getSize(BTNode<T> *tree) {
+template<typename T> 
+int BinaryTree<T>::getSize(BTNode<T> *tree) {
     if (!tree) {
         return 0;
     }
     return 1 + this->getSize(tree->leftChild) + this->getSize(tree->rightChild);
 }
 
-template<typename T> int BinaryTree<T>::getHeight(BTNode<T> *tree) {
+template<typename T> 
+int BinaryTree<T>::getHeight(BTNode<T> *tree) {
     if (!tree) {
         return 0;
     }
@@ -143,7 +154,8 @@ template<typename T> int BinaryTree<T>::getHeight(BTNode<T> *tree) {
     return (left > right) ? left + 1 : right + 1;
 }
 
-template<typename T> void BinaryTree<T>::destroy(BTNode<T> *tree) {
+template<typename T> 
+void BinaryTree<T>::destroy(BTNode<T> *tree) {
     if (tree) {
         this->destroy(tree->leftChild);
         this->destroy(tree->rightChild);
@@ -152,7 +164,8 @@ template<typename T> void BinaryTree<T>::destroy(BTNode<T> *tree) {
     }
 }
 
-template<typename T> BTNode<T>* BinaryTree<T>::copy(BTNode<T> *tree) {
+template<typename T> 
+BTNode<T>* BinaryTree<T>::copy(BTNode<T> *tree) {
     if (!tree) {
         return nullptr;
     }
@@ -163,7 +176,8 @@ template<typename T> BTNode<T>* BinaryTree<T>::copy(BTNode<T> *tree) {
     return newTree;
 }
 
-template<typename T> bool BinaryTree<T>::isEqual(BTNode<T> *aTree, BTNode<T> *bTree) {
+template<typename T> 
+bool BinaryTree<T>::isEqual(BTNode<T> *aTree, BTNode<T> *bTree) {
     if (!aTree && !bTree) {
         return true;
     }
